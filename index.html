@@ -145,6 +145,8 @@ Error message and password prompt
 
 <li>$:/config/HideSidebarOnStartup</li>
 
+<li>$:/config/Manager/RecentTags</li>
+
 <li>$:/config/Manager/System</li>
 
 <li>$:/config/ViewToolbarButtons/Visibility/$:/core/ui/Buttons/close</li>
@@ -156,6 +158,10 @@ Error message and password prompt
 <li>$:/config/WikiParserRules/Inline/wikilink</li>
 
 <li>$:/core</li>
+
+<li>$:/core/ui/ViewTemplate/subtitle</li>
+
+<li>$:/core/ui/ViewTemplate/title</li>
 
 <li>$:/DefaultTiddlers</li>
 
@@ -257,17 +263,20 @@ exports.startup = function() {
 <div bag="default" created="20151007165524815" creator="Tobias Beer" modified="20210125123601745" revision="0" tags="" title="$:/config/HideSidebarOnStartup" type="text/vnd.tiddlywiki">
 <pre>yes</pre>
 </div>
-<div created="20210125123550772" modified="20210125123550772" title="$:/config/Manager/System">
+<div created="20210129132827090" list="$:/tags/ViewTemplate" modified="20210129132827090" title="$:/config/Manager/RecentTags">
 <pre></pre>
 </div>
-<div created="20210125123517780" modified="20210125211757459" title="$:/config/ViewToolbarButtons/Visibility/$:/core/ui/Buttons/close">
-<pre>hide</pre>
+<div created="20210125123550772" modified="20210129132905349" title="$:/config/Manager/System">
+<pre>system</pre>
 </div>
-<div created="20210125123517104" modified="20210125211908712" title="$:/config/ViewToolbarButtons/Visibility/$:/core/ui/Buttons/edit">
-<pre>hide</pre>
+<div created="20210125123517780" modified="20210129132557584" title="$:/config/ViewToolbarButtons/Visibility/$:/core/ui/Buttons/close">
+<pre>show</pre>
 </div>
-<div created="20210125123516483" modified="20210125123516483" title="$:/config/ViewToolbarButtons/Visibility/$:/core/ui/Buttons/more-tiddler-actions">
-<pre>hide</pre>
+<div created="20210125123517104" modified="20210129132554862" title="$:/config/ViewToolbarButtons/Visibility/$:/core/ui/Buttons/edit">
+<pre>show</pre>
+</div>
+<div created="20210125123516483" modified="20210129132622101" title="$:/config/ViewToolbarButtons/Visibility/$:/core/ui/Buttons/more-tiddler-actions">
+<pre>show</pre>
 </div>
 <div created="20210125115246966" modified="20210125115246966" title="$:/config/WikiParserRules/Inline/wikilink">
 <pre>disable</pre>
@@ -10136,6 +10145,61 @@ exports.startup = function() {
     }
 }</pre>
 </div>
+<div created="20210129132832711" modified="20210129132836595" tags="" title="$:/core/ui/ViewTemplate/subtitle">
+<pre>\whitespace trim
+&lt;$reveal type=&quot;nomatch&quot; stateTitle=&lt;&lt;folded-state&gt;&gt; text=&quot;hide&quot; tag=&quot;div&quot; retain=&quot;yes&quot; animate=&quot;yes&quot;&gt;
+&lt;div class=&quot;tc-subtitle&quot;&gt;
+&lt;$link to={{!!modifier}} /&gt;
+&lt;$view field=&quot;modified&quot; format=&quot;date&quot; template={{$:/language/Tiddler/DateFormat}}/&gt;
+&lt;/div&gt;
+&lt;/$reveal&gt;
+</pre>
+</div>
+<div created="20210129132625297" modified="20210129132932672" tags="" title="$:/core/ui/ViewTemplate/title">
+<pre>\whitespace trim
+\define title-styles()
+fill:$(foregroundColor)$;
+\end
+\define config-title()
+$:/config/ViewToolbarButtons/Visibility/$(listItem)$
+\end
+&lt;div class=&quot;tc-tiddler-title&quot;&gt;
+&lt;div class=&quot;tc-titlebar&quot;&gt;
+&lt;span class=&quot;tc-tiddler-controls&quot;&gt;
+&lt;$list filter=&quot;[all[shadows+tiddlers]tag[$:/tags/ViewToolbar]!has[draft.of]]&quot; variable=&quot;listItem&quot;&gt;&lt;$reveal type=&quot;nomatch&quot; state=&lt;&lt;config-title&gt;&gt; text=&quot;hide&quot;&gt;&lt;$set name=&quot;tv-config-toolbar-class&quot; filter=&quot;[&lt;tv-config-toolbar-class&gt;] [&lt;listItem&gt;encodeuricomponent[]addprefix[tc-btn-]]&quot;&gt;&lt;$transclude tiddler=&lt;&lt;listItem&gt;&gt;/&gt;&lt;/$set&gt;&lt;/$reveal&gt;&lt;/$list&gt;
+&lt;/span&gt;
+&lt;$set name=&quot;tv-wikilinks&quot; value={{$:/config/Tiddlers/TitleLinks}}&gt;
+&lt;$link&gt;
+&lt;$set name=&quot;foregroundColor&quot; value={{!!color}}&gt;
+&lt;$list filter=&quot;[all[current]has[icon]]~[[$:/config/DefaultTiddlerIcon]has[text]]&quot;&gt;
+&lt;span class=&quot;tc-tiddler-title-icon&quot; style=&lt;&lt;title-styles&gt;&gt;&gt;
+&lt;$transclude tiddler={{!!icon}}&gt;
+&lt;$transclude tiddler={{$:/config/DefaultTiddlerIcon}}/&gt;
+&lt;/$transclude&gt;
+&lt;/span&gt;
+&lt;/$list&gt;
+&lt;/$set&gt;
+&lt;$list filter=&quot;[all[current]removeprefix[$:/]]&quot;&gt;
+&lt;h2 class=&quot;tc-title&quot; title={{$:/language/SystemTiddler/Tooltip}}&gt;
+&lt;span class=&quot;tc-system-title-prefix&quot;&gt;$:/&lt;/span&gt;&lt;$text text=&lt;&lt;currentTiddler&gt;&gt;/&gt;
+&lt;/h2&gt;
+&lt;/$list&gt;
+&lt;$list filter=&quot;[all[current]!prefix[$:/]]&quot;&gt;
+&lt;h2 class=&quot;tc-title&quot;&gt;
+&lt;$view field=&quot;title&quot;/&gt;
+&lt;/h2&gt;
+&lt;/$list&gt;
+&lt;/$link&gt;
+&lt;/$set&gt;
+&lt;/div&gt;
+
+&lt;$reveal type=&quot;nomatch&quot; text=&quot;&quot; default=&quot;&quot; state=&lt;&lt;tiddlerInfoState&gt;&gt; class=&quot;tc-tiddler-info tc-popup-handle&quot; animate=&quot;yes&quot; retain=&quot;yes&quot;&gt;
+
+&lt;$list filter=&quot;[all[shadows+tiddlers]tag[$:/tags/TiddlerInfoSegment]!has[draft.of]] [[$:/core/ui/TiddlerInfo]]&quot; variable=&quot;listItem&quot;&gt;&lt;$transclude tiddler=&lt;&lt;listItem&gt;&gt; mode=&quot;block&quot;/&gt;&lt;/$list&gt;
+
+&lt;/$reveal&gt;
+&lt;/div&gt;</pre>
+</div>
 <div created="20210125111656715" modified="20210125112042451" title="$:/DefaultTiddlers">
 <pre>Home</pre>
 </div>
@@ -10168,19 +10232,19 @@ exports.startup = function() {
 <div created="20210125115229355" modified="20210125123544567" title="$:/SiteTitle">
 <pre>TiddlyTime</pre>
 </div>
-<div created="20210125210955520" modified="20210125211752860" title="$:/state/advancedsearch/currentTab">
+<div created="20210125210955520" modified="20210129132927556" title="$:/state/advancedsearch/currentTab">
 <pre>$:/core/ui/AdvancedSearch/Standard</pre>
 </div>
 <div created="20210125112534591" modified="20210125205539538" title="$:/state/showeditpreview">
 <pre>no</pre>
 </div>
-<div created="20210125112436684" modified="20210125211914382" title="$:/state/sidebar">
-<pre>no</pre>
+<div created="20210125112436684" modified="20210129132551772" title="$:/state/sidebar">
+<pre>yes</pre>
 </div>
-<div created="20210125210955520" modified="20210125211752860" title="$:/state/tab--1498284803">
+<div created="20210125210955520" modified="20210129132927556" title="$:/state/tab--1498284803">
 <pre>$:/core/ui/AdvancedSearch/Standard</pre>
 </div>
-<div created="20210125123514795" modified="20210125123514795" title="$:/state/tab--1963855381">
+<div created="20210125123514795" modified="20210129132620909" title="$:/state/tab--1963855381">
 <pre>$:/core/ui/ControlPanel/Toolbars</pre>
 </div>
 <div created="20210125115244394" modified="20210125202946796" title="$:/state/tab-1749438307">
@@ -10189,8 +10253,8 @@ exports.startup = function() {
 <div created="20210125123319605" modified="20210125123420321" title="$:/state/tab/moresidebar-1850697562">
 <pre>$:/core/ui/MoreSideBar/All</pre>
 </div>
-<div created="20210125123316830" modified="20210125123604662" title="$:/state/tab/sidebar--595412856">
-<pre>$:/core/ui/SideBar/Open</pre>
+<div created="20210125123316830" modified="20210129132701918" title="$:/state/tab/sidebar--595412856">
+<pre>$:/core/ui/SideBar/Tools</pre>
 </div>
 <div created="20210125211651870" modified="20210125211652194" title="$:/state/tabs/controlpanel/toolbars-1345989671">
 <pre>$:/core/ui/ControlPanel/Toolbars/ViewToolbar</pre>
@@ -10198,7 +10262,7 @@ exports.startup = function() {
 <div title="$:/status/RequireReloadDueToPluginChange">
 <pre>no</pre>
 </div>
-<div created="20210125202944453" list="Home" modified="20210125211842826" title="$:/StoryList">
+<div created="20210129132552837" list="Home" modified="20210129132924128" title="$:/StoryList">
 <pre></pre>
 </div>
 <div created="20210125111919529" modified="20210125111923103" title="$:/temp">
@@ -10313,7 +10377,7 @@ exports.startup = function() {
     }
 }</pre>
 </div>
-<div created="20210125111700995" modified="20210125211901355" tags="" title="Home">
+<div created="20210125111700995" modified="20210129132748346" tags="" title="Home">
 <pre>\define counterButton(txt)
 &lt;$button class=&quot;tc-btn-invisible buttonItem&quot;&gt;
 &lt;$action-createtiddler $basetitle=&quot;$:/me/event&quot; event=&quot;&quot;&quot;$txt$&quot;&quot;&quot; key={{$:/me/temp!!key}} /&gt;
@@ -10369,6 +10433,8 @@ table.hideTab td{
 
 &lt;hr /&gt;
 
+&lt;details&gt;
+&lt;summary&gt;Settings&lt;/summary&gt;
 &lt;table class=&quot;hideTab&quot; style=&quot;width: 100%&quot;&gt;
 &lt;tr&gt;
 &lt;td&gt;Event list (separate items with &quot;;&quot;):&lt;/td&gt;
@@ -10379,6 +10445,7 @@ table.hideTab td{
 &lt;td width=80%&gt;&lt;$edit-text tag=input tiddler=&quot;$:/me/temp&quot; class=&quot;myField&quot; field=&quot;key&quot;/&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/table&gt;
+&lt;/details&gt;
 
 &lt;table class=&quot;hideTab&quot; style=&quot;min-width: 100%;&quot;&gt;
 &lt;tr&gt;
